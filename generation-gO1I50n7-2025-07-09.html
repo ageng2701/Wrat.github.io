@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WRATCOIN - Decentralized Fundraising for Pharos Development</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .coin-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .bg-grid {
+            background-image: radial-gradient(circle, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans overflow-x-hidden bg-grid">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-gray-900/80 backdrop-blur-md z-50 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/askmeanything-4cdef.firebasestorage.app/o/images%2FoCiOL4xwkmNGcLPDZScFNZYBqBL2%2F1752084064650_1000300597.png?alt=media&token=65ad0b08-3176-4a0f-9d6d-bd8a1f155714" alt="WRATCOIN Logo" class="h-10 w-10">
+                    <h1 class="text-2xl font-bold">
+                        <span class="gradient-text" data-text-editable>WRATCOIN</span>
+                    </h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-gray-300 hover:text-white transition duration-300" data-text-editable>About</a>
+                    <a href="#pharos" class="text-gray-300 hover:text-white transition duration-300" data-text-editable>Pharos</a>
+                    <a href="#ecosystem" class="text-gray-300 hover:text-white transition duration-300" data-text-editable>Ecosystem</a>
+                    <a href="https://x.com/Skrilluw" target="_blank" rel="noopener" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition duration-300 flex items-center space-x-2" data-text-editable>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+                        </svg>
+                        <span>Twitter</span>
+                    </a>
+                </div>
+                <button class="md:hidden focus:outline-none" id="menu-toggle">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="fixed inset-0 bg-gray-900/90 z-40 hidden" id="mobile-menu">
+        <div class="flex flex-col items-center justify-center h-full space-y-8">
+            <a href="#about" class="text-2xl text-white hover:text-blue-400 transition duration-300" data-text-editable>About</a>
+            <a href="#pharos" class="text-2xl text-white hover:text-blue-400 transition duration-300" data-text-editable>Pharos</a>
+            <a href="#ecosystem" class="text-2xl text-white hover:text-blue-400 transition duration-300" data-text-editable>Ecosystem</a>
+            <a href="https://x.com/Skrilluw" target="_blank" rel="noopener" class="text-2xl text-white hover:text-blue-400 transition duration-300 flex items-center space-x-2" data-text-editable>
+                <span>Twitter</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+                </svg>
+            </a>
+            <button class="absolute top-6 right-6 text-white" id="close-menu">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 md:pt-40 md:pb-32 px-6 relative overflow-hidden">
+        <div class="container mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-12 md:mb-0">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                    <span data-text-editable>Decentralized </span>
+                    <span class="gradient-text" data-text-editable>Fundraising</span>
+                    <span data-text-editable> for </span>
+                    <span class="gradient-text" data-text-editable>Pharos</span>
+                </h1>
+                <p class="text-xl text-gray-300 mb-8 max-w-lg" data-text-editable>
+                    WRATCOIN (WRTC) is a revolutionary token designed to empower community-driven development of the Pharos platform through decentralized fundraising.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#about" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-medium transition duration-300 text-center" data-text-editable>Learn More</a>
+                    <a href="https://x.com/Skrilluw" target="_blank" rel="noopener" class="border border-blue-400 text-blue-400 hover:bg-blue-400/10 px-8 py-3 rounded-full text-lg font-medium transition duration-300 flex items-center justify-center space-x-2" data-text-editable>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+                        </svg>
+                        <span>Follow Us</span>
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center relative">
+                <img src="https://firebasestorage.googleapis.com/v0/b/askmeanything-4cdef.firebasestorage.app/o/images%2FoCiOL4xwkmNGcLPDZScFNZYBqBL2%2F1752084072670_1000300596.png?alt=media&token=8a9228ce-4672-4799-9ada-cc124bb18286" alt="WRATCOIN Token" class="max-w-xs md:max-w-md coin-float">
+                <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-blue-600 rounded-full filter blur-3xl opacity-20"></div>
+                <div class="absolute -top-10 -left-10 w-64 h-64 bg-purple-600 rounded-full filter blur-3xl opacity-20"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 bg-gray-800/50">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="gradient-text" data-text-editable>About WRATCOIN</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-6"></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto" data-text-editable>
+                    WRATCOIN (WRTC) is a decentralized fundraising token designed to finance the development of Pharos while creating an engaged community ecosystem.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-blue-500 transition duration-300">
+                    <div class="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4" data-text-editable>Decentralized Funding</h3>
+                    <p class="text-gray-300" data-text-editable>
+                        WRTC provides a transparent, community-driven funding mechanism for Pharos development, removing traditional barriers to project financing.
+                    </p>
+                </div>
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-purple-500 transition duration-300">
+                    <div class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4" data-text-editable>Community Ecosystem</h3>
+                    <p class="text-gray-300" data-text-editable>
+                        Active participation is rewarded, creating a vibrant ecosystem where token holders directly influence Pharos development priorities.
+                    </p>
+                </div>
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-blue-400 transition duration-300">
+                    <div class="w-16 h-16 bg-blue-400/10 rounded-full flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4" data-text-editable>Secure & Transparent</h3>
+                    <p class="text-gray-300" data-text-editable>
+                        Built on blockchain technology, WRTC ensures secure transactions and complete transparency in fund allocation and development progress.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pharos Section -->
+    <section id="pharos" class="py-20 px-6 relative overflow-hidden">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0 md:pr-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                        <span data-text-editable>Fueling </span>
+                        <span class="gradient-text" data-text-editable>Pharos</span>
+                        <span data-text-editable> Development</span>
+                    </h2>
+                    <p class="text-xl text-gray-300 mb-8" data-text-editable>
+                        Pharos represents a groundbreaking platform that will revolutionize its industry. WRATCOIN provides the decentralized funding mechanism to make this vision a reality.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <svg class="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-gray-300" data-text-editable>Direct funding for core development teams</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-gray-300" data-text-editable>Community-driven feature prioritization</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="h-6 w-6 text-green-400 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-gray-300" data-text-editable>Transparent allocation of resources</span>
+                        </li>
+                    </ul>
+                    <a href="#ecosystem" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-medium transition duration-300" data-text-editable>Join the Ecosystem</a>
+                </div>
+                <div class="md:w-1/2 relative">
+                    <div class="bg-gray-800/50 border border-gray-700 rounded-xl p-8 backdrop-blur-sm">
+                        <h3 class="text-2xl font-bold mb-6 text-center" data-text-editable>Funding Allocation</h3>
+                        <div class="h-64 w-full">
+                            <canvas id="fundingChart"></canvas>
+                        </div>
+                        <p class="text-gray-400 text-sm mt-4 text-center" data-text-editable>
+                            *Actual allocations may vary based on community governance votes
+                        </p>
+                    </div>
+                    <div class="absolute -top-10 -right-10 w-64 h-64 bg-purple-600 rounded-full filter blur-3xl opacity-10 z-0"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem Section -->
+    <section id="ecosystem" class="py-20 px-6 bg-gray-800/30">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    <span class="gradient-text" data-text-editable>Token Ecosystem</span>
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-6"></div>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto" data-text-editable>
+                    The WRATCOIN ecosystem is designed to incentivize participation and create value for all stakeholders.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-blue-500 transition duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold" data-text-editable>Token Utility</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <svg class="h-5 w-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-gray-300" data-text-editable>Governance voting rights</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="h-5 w-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-gray-300" data-text-editable>Early access to Pharos features</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="h-5 w-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-gray-300" data-text-editable>Staking rewards</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="h-5 w-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-gray-300" data-text-editable>Exclusive community benefits</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-purple-500 transition duration-300">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold" data-text-editable>Roadmap</h3>
+                    </div>
+                    <div class="relative pl-8">
+                        <div class="absolute left-3 top-0 h-full w-0.5 bg-gradient-to-b from-purple-500 to-blue-500"></div>
+                        <div class="relative mb-8">
+                            <div class="absolute -left-8 top-1 w-4 h-4 rounded-full bg-purple-500"></div>
+                            <h4 class="font-bold mb-1" data-text-editable>Phase 1: Token Launch</h4>
+                            <p class="text-gray-400 text-sm" data-text-editable>Q3 2024</p>
+                        </div>
+                        <div class="relative mb-8">
+                            <div class="absolute -left-8 top-1 w-4 h-4 rounded-full bg-blue-500"></div>
+                            <h4 class="font-bold mb-1" data-text-editable>Phase 2: Community Building</h4>
+                            <p class="text-gray-400 text-sm" data-text-editable>Q4 2024</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-8 top-1 w-4 h-4 rounded-full bg-blue-400"></div>
+                            <h4 class="font-bold mb-1" data-text-editable>Phase 3: Pharos Development</h4>
+                            <p class="text-gray-400 text-sm" data-text-editable>2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 relative overflow-hidden">
+        <div class="container mx-auto text-center">
+            <div class="max-w-3xl mx-auto relative z-10">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    <span data-text-editable>Join the </span>
+                    <span class="gradient-text" data-text-editable>WRATCOIN</span>
+                    <span data-text-editable> Revolution</span>
+                </h2>
+                <p class="text-xl text-gray-300 mb-8" data-text-editable>
+                    Be part of the decentralized future of project funding and community-driven development.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="https://x.com/Skrilluw" target="_blank" rel="noopener" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-medium transition duration-300 inline-flex items-center justify-center space-x-2" data-text-editable>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+                        </svg>
+                        <span>Follow on Twitter</span>
+                    </a>
+                    <a href="#about" class="border border-blue-400 text-blue-400 hover:bg-blue-400/10 px-8 py-3 rounded-full text-lg font-medium transition duration-300 inline-flex items-center justify-center" data-text-editable>
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-blue-600 rounded-full filter blur-3xl opacity-10"></div>
+            <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-purple-600 rounded-full filter blur-3xl opacity-10"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-12 px-6">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-6 md:mb-0">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/askmeanything-4cdef.firebasestorage.app/o/images%2FoCiOL4xwkmNGcLPDZScFNZYBqBL2%2F1752084064650_1000300597.png?alt=media&token=65ad0b08-3176-4a0f-9d6d-bd8a1f155714" alt="WRATCOIN Logo" class="h-8 w-8">
+                    <span class="text-xl font-bold" data-text-editable>WRATCOIN</span>
+                </div>
+                <div class="flex space-x-6 mb-6 md:mb-0">
+                    <a href="#about" class="text-gray-400 hover:text-white transition duration-300" data-text-editable>About</a>
+                    <a href="#pharos" class="text-gray-400 hover:text-white transition duration-300" data-text-editable>Pharos</a>
+                    <a href="#ecosystem" class="text-gray-400 hover:text-white transition duration-300" data-text-editable>Ecosystem</a>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://x.com/Skrilluw" target="_blank" rel="noopener" class="text-gray-400 hover:text-blue-400 transition duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>
+                    <span data-text-editable>Created with love by </span>
+                    <a href="https://linos.ai" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 transition duration-300" data-text-editable>Linos.ai</a>
+                    <span data-text-editable>, all rights reserved.</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('hidden');
+        });
+
+        document.getElementById('close-menu').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        });
+
+        // Smooth scrolling
+        $('a[href*="#"]').on('click', function(e) {
+            const target = $($(this).attr('href'));
+            if (target.length) {
+                e.preventDefault();
+                $('html, body').animate(
+                    {
+                        scrollTop: target.offset().top - 80,
+                    },
+                    500,
+                    'linear'
+                );
+            }
+        });
+
+        // Funding chart
+        const ctx = document.getElementById('fundingChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Core Development', 'Community Rewards', 'Marketing', 'Reserve Fund', 'Team'],
+                datasets: [{
+                    data: [40, 25, 15, 10, 10],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(99, 102, 241, 0.8)',
+                        'rgba(167, 139, 250, 0.8)',
+                        'rgba(79, 70, 229, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#E5E7EB',
+                            font: {
+                                family: 'sans-serif'
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Scroll animations
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.classList.add('animate-fadeInUp');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll(); // Run once on page load
+    </script>
+</body>
+</html>
